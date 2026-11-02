@@ -16,15 +16,27 @@ Requirements for bringing the tunnel up:
 - Linux: `wireguard` kernel module + `wg-quick` (`wireguard-tools`)
 - Windows/macOS: install [WireGuard](https://www.wireguard.com/install/); if `wg-quick` is missing, `vscale up` writes a `.conf` you can import into the WireGuard app
 
-## Join a vscale
+## Install (easiest)
 
-Ask an admin for:
-
-1. Control plane URL (e.g. `http://192.168.68.113:30808`)
-2. A **join token**
+Debian/Ubuntu:
 
 ```bash
-vscale join <TOKEN> --server http://192.168.68.113:30808 --name laptop
+curl -fsSL https://raw.githubusercontent.com/zpol/vscale/main/scripts/install.sh | sudo bash
+# or: sudo apt install ./vscale_*_amd64.deb
+```
+
+## Join a vscale
+
+Ask an admin for a **join token**, then:
+
+```bash
+vscale setup
+```
+
+Or manually:
+
+```bash
+vscale join <TOKEN> --server https://vscale.0ffsec.com --name laptop
 vscale up
 vscale status
 ```

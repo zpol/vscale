@@ -33,7 +33,7 @@ sequenceDiagram
 
 ## Domain model
 
-- **Vscale** — overlay network with a dedicated CIDR inside `100.64.0.0/10`
+- **Vscale** — overlay network with a dedicated CIDR inside `10.66.0.0/16` (default)
 - **Hub** — WireGuard endpoint for a vscale (public endpoint + listen port)
 - **Device** — enrolled agent with overlay `/32`
 - **Membership** — user role inside a vscale (`owner` / `admin` / `member`)

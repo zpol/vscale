@@ -57,4 +57,4 @@ On `up` / heartbeat the agent sends `localCidrs`. The control plane returns warn
 ## MTU / DNS
 
 - Default MTU `1420`
-- Per-vscale DNS (default `1.1.1.1`) pushed into client configs
+- Client WireGuard configs do **not** set `DNS =` (avoids breaking local/Tailscale DNS). Overlay DNS metadata on a vscale is optional/admin-only.
