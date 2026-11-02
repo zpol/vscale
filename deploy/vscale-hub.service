@@ -1,0 +1,15 @@
+[Unit]
+Description=vscale hub agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=VSCALE_STATE=/var/lib/vscale/state.json
+Environment=VSCALE_WG_CONF=/etc/wireguard/vscale0.conf
+ExecStart=/usr/local/bin/vscale daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

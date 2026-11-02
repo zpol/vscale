@@ -1,0 +1,37 @@
+# Used by GoReleaser nfpms and scripts/build-deb.sh (via nfpm if present).
+name: vscale
+arch: ${GOARCH}
+platform: linux
+version: ${VERSION}
+section: net
+priority: optional
+maintainer: zpol <zpol@users.noreply.github.com>
+description: |
+  vscale — easy hub-spoke WireGuard VPN agent for home and small teams.
+  Join a network with one command, then bring the tunnel up.
+vendor: zpol
+homepage: https://github.com/zpol/vscale
+license: MIT
+depends:
+  - wireguard-tools
+contents:
+  - src: ./dist/pkg/vscale
+    dst: /usr/bin/vscale
+    file_info:
+      mode: 0755
+  - src: ./packaging/debian/changelog
+    dst: /usr/share/doc/vscale/changelog.gz
+    packager: gzip
+  - src: ./packaging/debian/copyright
+    dst: /usr/share/doc/vscale/copyright
+  - src: ./docs/user-guide.md
+    dst: /usr/share/doc/vscale/user-guide.md
+scripts:
+  postinstall: ./packaging/scripts/postinstall.sh
+overrides:
+  deb:
+    depends:
+      - wireguard-tools
+  rpm:
+    depends:
+      - wireguard-tools

@@ -1,0 +1,12 @@
+dist/
+web/node_modules/
+web/build/
+*.exe
+.env
+.DS_Store
+/tmp/
+*.test
+*.deb
+*.rpm
+.idea/
+.vscode/

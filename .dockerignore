@@ -1,0 +1,8 @@
+.git
+dist
+web/node_modules
+web/build
+wg-manager/frontend/node_modules
+wg-manager/wg-configs
+**/*.md
+!README.md

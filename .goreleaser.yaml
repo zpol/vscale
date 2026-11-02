@@ -1,0 +1,95 @@
+version: 2
+project_name: vscale
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: vscale
+    main: ./cmd/vscale
+    binary: vscale
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    goos: [linux, windows, darwin]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm64
+  - id: control-plane
+    main: ./cmd/control-plane
+    binary: vscale-control-plane
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+    goos: [linux]
+    goarch: [amd64, arm64]
+
+archives:
+  - id: vscale
+    builds: [vscale]
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "arm64" }}arm64
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - LICENSE
+      - README.md
+      - docs/user-guide.md
+  - id: control-plane
+    builds: [control-plane]
+    name_template: "vscale-control-plane_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+      - README.md
+
+nfpms:
+  - id: vscale-deb-rpm
+    package_name: vscale
+    builds: [vscale]
+    homepage: https://github.com/zpol/vscale
+    maintainer: zpol <zpol@users.noreply.github.com>
+    description: |-
+      Easy hub-spoke WireGuard VPN agent for home and small teams.
+      Run: vscale setup
+    license: MIT
+    formats: [deb, rpm]
+    bindir: /usr/bin
+    section: net
+    priority: optional
+    dependencies:
+      - wireguard-tools
+    scripts:
+      postinstall: packaging/scripts/postinstall.sh
+    contents:
+      - src: docs/user-guide.md
+        dst: /usr/share/doc/vscale/user-guide.md
+      - src: LICENSE
+        dst: /usr/share/doc/vscale/copyright
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+release:
+  github:
+    owner: zpol
+    name: vscale
+  draft: false
+  prerelease: auto
+  extra_files:
+    - glob: ./scripts/install.sh
